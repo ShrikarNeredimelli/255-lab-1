@@ -1,15 +1,14 @@
-from flask import Flask, request, render_template_string, redirect, url_for
+from flask import Flask, request, render_template_string, redirect, url_for, g
 import sqlite3
 import os
 
 app = Flask(__name__)
 
-# Database file path
 DATABASE = '/nfs/demo.db'
 
 def get_db():
-    db = sqlite3.connect(DATABASE)
-    db.row_factory = sqlite3.Row  # name-based access to columns
+    db = sqlite3.connect(app.config.get('DATABASE', DATABASE))
+    db.row_factory = sqlite3.Row
     return db
 
 def init_db():
