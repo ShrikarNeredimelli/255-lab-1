@@ -18,16 +18,14 @@ pipeline {
 stage('Run Tests') {
     steps {
         script {
-            sh 'pip3 install pytest --quiet'
-            sh 'pytest test_app.py -v'
+            sh 'docker run --rm -v $WORKSPACE:/app -w /app python:3.9-slim sh -c "pip install pytest flask --quiet && pytest test_app.py -v"'
         }
     }
 }
 stage('Security Scan') {
     steps {
         script {
-            sh 'pip3 install bandit --quiet'
-            sh 'bandit -r . -x ./test_app.py'
+            sh 'docker run --rm -v $WORKSPACE:/app -w /app python:3.9-slim sh -c "pip install bandit --quiet && bandit -r . -x ./test_app.py"'
         }
     }
 }
