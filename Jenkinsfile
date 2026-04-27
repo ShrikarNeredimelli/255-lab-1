@@ -15,22 +15,22 @@ pipeline {
                           userRemoteConfigs: [[url: "${GITHUB_URL}"]]])
             }
         }
-        stage('Run Tests') {
-            steps {
-                script {
-                    sh 'pip install pytest --quiet'
-                    sh 'pytest test_app.py -v'
-                }
-            }
+stage('Run Tests') {
+    steps {
+        script {
+            sh 'pip3 install pytest --quiet'
+            sh 'pytest test_app.py -v'
         }
-        stage('Security Scan') {
-            steps {
-                script {
-                    sh 'pip install bandit --quiet'
-                    sh 'bandit -r . -x ./test_app.py'
-                }
-            }
+    }
+}
+stage('Security Scan') {
+    steps {
+        script {
+            sh 'pip3 install bandit --quiet'
+            sh 'bandit -r . -x ./test_app.py'
         }
+    }
+}
         stage('Build Docker Image') {
             steps {
                 script {
