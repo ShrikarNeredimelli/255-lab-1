@@ -1,29 +1,13 @@
 import pytest
-import os
-import sqlite3
-from unittest.mock import patch
-
-# Patch the DATABASE path before importing app
-import main
-main.DATABASE = ':memory:'
-
 from main import app, init_db
 
 @pytest.fixture
 def client():
     app.config['TESTING'] = True
-    main.DATABASE = ':memory:'
+    app.config['DATABASE'] = ':memory:'
     with app.test_client() as client:
         with app.app_context():
-            db = sqlite3.connect(':memory:')
-            db.execute('''
-                CREATE TABLE IF NOT EXISTS contacts (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    name TEXT NOT NULL,
-                    phone TEXT NOT NULL
-                );
-            ''')
-            db.commit()
+            init_db()
         yield client
 
 def test_index_get(client):
